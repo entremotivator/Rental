@@ -29,11 +29,15 @@ else:
         st.success(f"Welcome back, {user_email}!")
     
     with col2:
-        queries_used = get_user_usage(user_id, user_email)
+        try:
+            queries_used = get_user_usage(user_id, user_email)
+        except Exception as e:
+            st.error(f"Error fetching usage: {e}")
+            queries_used = 0
         st.metric("Queries Used", f"{queries_used}/30")
     
     with col3:
-        remaining = 30 - queries_used
+        remaining = max(30 - queries_used, 0)
         st.metric("Remaining", remaining)
     
     st.markdown("---")
